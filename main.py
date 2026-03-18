@@ -47,10 +47,11 @@ def initialize_system():
     
     # 2. Инициализируем векторное хранилище ChromaDB
     print("\n[2/4] Инициализация векторного хранилища...")
+    embedding_model = os.getenv("EMBEDDING_MODEL", "text-embedding-3-small")
     embedding_store = EmbeddingStore(
         collection_name="rag_documents",
-        persist_directory="./chroma_db",
-        embedding_model="text-embedding-3-small",  # Модель OpenAI для эмбеддингов
+        persist_directory=os.getenv("CHROMA_PERSIST_DIR", "./chroma_db"),
+        embedding_model=embedding_model,
         api_key=api_key
     )
     
@@ -66,8 +67,8 @@ def initialize_system():
     print("\n[3/4] Инициализация RAG-ассистента...")
     rag_assistant = RAGAssistant(
         embedding_store=embedding_store,
-        model="gpt-3.5-turbo",
-        temperature=0.7
+        model=os.getenv("MODEL_NAME", "gpt-4.1-mini"),
+        temperature=float(os.getenv("TEMPERATURE", "0.5"))
     )
     
     # 4. Инициализируем логгер базы данных
