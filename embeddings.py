@@ -300,7 +300,9 @@ def get_sample_documents() -> List[Tuple[str, str]]:
         Список кортежей (название, текст)
     """
     # Пытаемся загрузить документы из папки
-    documents = load_documents_from_folder("docs")
+    # Используем путь относительно этого файла, чтобы работало независимо от рабочей директории
+    base_dir = Path(__file__).parent
+    documents = load_documents_from_folder(str(base_dir / "docs"))
     
     # Если документы не найдены, используем встроенные примеры
     if not documents:
